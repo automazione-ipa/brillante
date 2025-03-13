@@ -7,16 +7,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Welcome to the Twitter Bot App!</h1>
+    <div class="container">
+        <h1>Twitter Bot App</h1>
 
-    <!-- Form to create a post -->
-    <form id="createPostForm">
-        <label for="topic">Enter Topic:</label>
-        <input type="text" id="topic" name="topic" required>
-        <button type="submit">Create Post</button>
-    </form>
+        <form id="createPostForm" class="form">
+            <label for="topic" class="label">Enter Topic:</label>
+            <input type="text" id="topic" name="topic" class="input" placeholder="Enter a topic..." required>
+            <button type="submit" class="btn">Create Post</button>
+        </form>
 
-    <div id="response"></div>
+        <div id="response" class="response"></div>
+    </div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

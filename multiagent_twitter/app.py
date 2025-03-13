@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from bot import create_post
-from logic.entities import TopicRequest
+
 
 app = Flask(__name__)
 

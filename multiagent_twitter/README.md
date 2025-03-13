@@ -58,6 +58,33 @@ Il repository è organizzato secondo la seguente struttura:
     └── bot.py          
 
 
+
+## File di configurazione
+Impostare un file `.env` di configurazione che risulta simile al seguente:
+
+```bash
+
+OPENAI_API_KEY="sk-proj-abcdef12345"
+
+FLASK_SECRET_KEY="asdfghjkl1234567"
+DB_CONNECTION_STRING="mongodb://localhost:27017/"
+
+DB_NAME="twitter_db"
+
+TWITTER_CLIENT_ID="aaaaaaaaaaaaa"
+TWITTER_CLIENT_SECRET="bbbbbbbbbbbbbb"
+
+TWITTER_API_KEY="key-ABCDEFGH"
+TWITTER_API_SECRET="key-ABCDEFGHIJKLMNO23456"
+
+ACCESS_TOKEN="key-ABCDEFGHIJKLMNO23456"
+ACCESS_TOKEN_SECRET="key-ABCDEFGHsports"
+
+TWITTER_BEARER_TOKEN="AAAAAAAAAAAAAAAAAAAAAkey-ABCDEFGHkey-ABCDEFGHkey-ABCDEFGHkey-ABCDEFGH"
+```
+
+
+
 ## Sviluppi successivi
 Il progetto in beta necessita di ulteriori fasi di raccolta dati, raccolta requisiti, analisi funzionali e tecniche, sviluppi, test unitari e di integrazione.
 

@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-from logic.entities import Tweet
+from logic.entities import Message
 
 
 class ChatAgent:
@@ -16,15 +16,20 @@ class ChatAgent:
 
         self.client = OpenAI(api_key=self.api_key)
 
-    def generate_tweet(self, prompt: str) -> Tweet:
+    def generate_receipt(self, user_prompt: str, system_prompt: str) -> Message:
         """
         Generates a tweet based on a given prompt using the Chat Completion API
         and returns a structured Tweet response.
 
-        :param prompt: The prompt to generate the tweet.
-        :return: A Tweet object containing the generated tweet and metadata.
+        :param user_prompt: The prompt to generate the receipt.
+        :param system_prompt: The system prompt to generate the receipt.
+
+        :return: A Message object containing the generated receipt and metadata.
         """
-        messages = [{"role": "user", "content": prompt}]
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
 
         response = self.client.chat.completions.create(
             model=self.model,
@@ -33,6 +38,6 @@ class ChatAgent:
             temperature=0.7,
         )
 
-        tweet_text = response.choices[0].message.content.strip()
+        result = response.choices[0].message.content.strip()
 
-        return Tweet(testo=tweet_text)
+        return Message(testo=result)

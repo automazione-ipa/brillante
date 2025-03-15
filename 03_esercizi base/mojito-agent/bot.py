@@ -1,16 +1,14 @@
 import os
 from dotenv import load_dotenv
 
-# Importiamo i moduli degli agenti
-from agents.db.db_core import DBCore
-from agents.openai.chat_agent import ChatAgent
+from db.db_core import DBCore
+from openai_agent.chat_agent import ChatAgent
 
 load_dotenv()
 
+
 class CocktailAgent:
     def __init__(self):
-        # Qui potremmo definire delle ricette predefinite, ma in questa pipeline il DB è la fonte primaria.
-        # Possiamo usare questo agente anche per validare la struttura della ricetta.
         pass
 
     def is_valid_recipe(self, recipe: str) -> bool:
@@ -20,8 +18,8 @@ class CocktailAgent:
         """
         return "Ingredienti:" in recipe and "Preparazione:" in recipe
 
+
 def main():
-    # Instanzia gli agenti
     db_core = DBCore(
         connection_string=os.getenv("DB_CONNECTION_STRING"),
         db_name=os.getenv("DB_NAME")
@@ -39,7 +37,6 @@ def main():
             print("Arrivederci!")
             break
 
-        # 1. Cerca la ricetta nel database
         recipe = db_core.get_cocktail_recipe(cocktail_name)
         if recipe:
             print(f"\nRicetta trovata nel database per {cocktail_name.capitalize()}:\n{recipe}")
@@ -56,7 +53,6 @@ def main():
             )
             gpt_response = chat.generate_response(prompt)
 
-            # 3. Validazione della risposta generata
             if cocktail_agent.is_valid_recipe(gpt_response):
                 print(f"\nRicetta generata da GPT per {cocktail_name.capitalize()}:\n{gpt_response}")
                 recipe_id = db_core.save_cocktail_recipe(cocktail_name, gpt_response)
@@ -66,6 +62,7 @@ def main():
                 print("Risposta ricevuta:")
                 print(gpt_response)
                 print("Si prega di riformulare il prompt o verificare eventuali errori.")
+
 
 if __name__ == "__main__":
     main()

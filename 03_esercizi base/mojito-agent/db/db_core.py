@@ -10,9 +10,7 @@ class DBCore:
         """Inizializza la connessione a MongoDB."""
         self.client = MongoClient(connection_string)
         self.db = self.client[db_name]
-        # Collezione per i cocktail
         self.cocktails_collection = self.db["cocktails"]
-        # Collezione per gli ingredienti
         self.ingredients_collection = self.db["ingredients"]
 
     def save_ingredient(self, ingredient_name: str, ingredient_details: dict):
@@ -53,7 +51,6 @@ class DBCore:
         """
         document = self.cocktails_collection.find_one({"cocktail_name": cocktail_name.lower()})
         if document:
-            # Recupera gli ingredienti dal database per ogni ID
             ingredients = []
             for ingredient_id in document["ingredients"]:
                 ingredient = self.ingredients_collection.find_one({"_id": ingredient_id})

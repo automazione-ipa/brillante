@@ -1,4 +1,4 @@
-from openai import OpenAI
+from openai_agent import OpenAI
 
 from logic.entities import Tweet
 

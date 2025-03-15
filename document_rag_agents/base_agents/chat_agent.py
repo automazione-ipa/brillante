@@ -1,7 +1,7 @@
 from typing import Optional
 import re
 
-from openai import OpenAI
+from openai_agent import OpenAI
 
 
 class ChatAgent:

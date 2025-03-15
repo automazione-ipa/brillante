@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 from agents.db.db_core import DBCore
 from agents.twitter.tweepy_api import TwitterAPIWrapper
-from agents.openai.chat_agent import ChatAgent
+from agents.openai_agent.chat_agent import ChatAgent
 
 load_dotenv()
 

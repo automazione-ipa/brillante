@@ -14,7 +14,7 @@ def fibonacci_iterative(n):
     return fib_sequence[:n]
 
 
-class MathAgent:
+class MathFibAgent:
     @staticmethod
     def fibonacci_recursive(n):
         return fibonacci_recursive(n)
@@ -23,15 +23,3 @@ class MathAgent:
     def fibonacci_iterative(n):
         return fibonacci_iterative(n)
 
-
-math_agent = MathAgent()
-
-print(
-    "Iterative Fibonacci:",
-    math_agent.fibonacci_iterative(10)
-)
-
-print(
-    "Recursive Fibonacci:",
-    [MathAgent.fibonacci_recursive(i) for i in range(10)]
-)

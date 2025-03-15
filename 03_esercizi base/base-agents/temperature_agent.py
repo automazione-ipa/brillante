@@ -51,14 +51,3 @@ class TemperatureAgent:
         convert_func = conversion_map[(from_unit, to_unit)]
         return convert_func(value)
 
-
-# Creazione di un'istanza dell'agente
-tmp_agent = TemperatureAgent()
-KELVIN = "kelvin"
-CELSIUS = "celsius"
-FAHRENHEIT = "fahrenheit"
-# Esempio di utilizzo
-kelvin_value = tmp_agent.convert_temperature(
-    value=35, from_unit=CELSIUS, to_unit=FAHRENHEIT
-)
-print(f"12 °C = {kelvin_value} K")

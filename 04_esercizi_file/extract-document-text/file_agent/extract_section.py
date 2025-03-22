@@ -1,6 +1,12 @@
 import re
 
 
+def clean_extracted_text(text):
+    """Inserisce una nuova riga prima di ogni titolo attaccato alla parola precedente"""
+    cleaned_text = re.sub(r"([a-zà-ú])([A-ZÀ-Ú])", r"\1\n\2", text)
+    return cleaned_text
+
+
 def divide_sections(text):
     """Divide il testo in sezioni basandosi sui titoli in maiuscolo"""
     return re.split(r"(\n[A-ZÀ-Ú][A-ZÀ-Ú\s]+\n)", text)
@@ -32,5 +38,7 @@ def extract_section(text, section_name):
     sections = divide_sections(text)
     # Dizionario { "titolo_paragrafo": "contenuto paragrafo" }
     section_dict = get_section_dict(sections)
+
+    print(f"\n\nSECTIONS\n\n{section_dict}")
     return get_content(section_dict, section_name)
 

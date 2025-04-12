@@ -1,7 +1,7 @@
 import PyPDF2
-import pickle
 import numpy as np
 from gpt_wrap import get_embedding
+from db_core import save_index
 
 
 def extract_text_from_pdf(pdf_path):
@@ -39,12 +39,6 @@ def build_index(chunks):
     for chunk in chunks:
         embeddings.append(generate_embedding(chunk))
     return embeddings
-
-
-def save_index(index, filename='index.pkl'):
-    """Funzione per salvare l'indice su disco."""
-    with open(filename, 'wb') as f:
-        pickle.dump(index, f)
 
 
 def main(pdf_path):

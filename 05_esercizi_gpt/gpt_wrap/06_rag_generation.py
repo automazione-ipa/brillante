@@ -1,17 +1,14 @@
-import pickle
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from gpt_wrap import chat_with_openai, get_embedding
+from db_core import load_index
 
-def load_index(filename='index.pkl'):
-    """Funzione per caricare l'indice da disco."""
-    with open(filename, 'rb') as f:
-        return pickle.load(f)
 
 def generate_embedding(text):
     """Funzione per generare l'embedding di un testo."""
     embedding = get_embedding(text)
     return np.array(embedding).reshape(1, -1)
+
 
 def retrieve_relevant_chunk(query, index, chunks, top_k=1):
     """Recupera i chunk rilevanti."""
@@ -19,6 +16,7 @@ def retrieve_relevant_chunk(query, index, chunks, top_k=1):
     similarities = cosine_similarity(query_embedding, index)
     relevant_indices = similarities.argsort()[0][-top_k:][::-1]
     return [chunks[i] for i in relevant_indices]
+
 
 def generate_answer_from_chunk(chunk, query, system_message):
     """Funzione per generare la risposta con OpenAI."""
@@ -28,6 +26,7 @@ def generate_answer_from_chunk(chunk, query, system_message):
         model="gpt-4o-mini",
         temperature=0.1
     )
+
 
 def main(query):
     index = load_index()
@@ -43,6 +42,7 @@ def main(query):
         system_message="Sei un assistente esperto."
     )
     print("Risposta:", answer)
+
 
 if __name__ == "__main__":
     query = "Qual è il tema principale del documento?"  # Sostituisci con la tua domanda

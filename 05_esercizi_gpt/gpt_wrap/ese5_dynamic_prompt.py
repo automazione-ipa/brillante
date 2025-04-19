@@ -1,5 +1,5 @@
 from gpt_wrap import chat_with_openai
-from prompts import zero_shot_prompt, few_shot_prompt, cot_prompt, role_expert_prompt  # Import prompts
+from prompts import zero_shot_prompt, few_shot_prompt, cot_prompt, role_expert_prompt
 
 
 def run_prompt(prompt_name, user_message):

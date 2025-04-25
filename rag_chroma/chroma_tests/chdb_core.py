@@ -2,7 +2,7 @@ import os
 import chromadb
 from chromadb import Documents, Embeddings
 
-from gpt_wrap import get_embedding
+from rag_chroma.gpt_wrap.gpt_wrap import get_embedding
 from chromadb.utils.embedding_functions import EmbeddingFunction
 
 

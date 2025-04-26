@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Any
+from typing import Optional
 
 class ShardInfo(BaseModel):
     """For a large document, sharding may be performed to produce

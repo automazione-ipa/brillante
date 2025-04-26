@@ -16,7 +16,7 @@ def write_file(path, content):
         f.write(content)
 
 
-def main():
+def remap_from_proto():
     input_file = "shard_info.py"
     output_file = "results/shard_info_remap.py"
 
@@ -32,7 +32,7 @@ def main():
     1. Converti le classi in modelli Pydantic BaseModel.
     2. Aggiungi gli import corretti di typing e pydantic.
     3. Scrivi il risultato chiamando la funzione `write_file`, salvando il file in "{output_file}".
-"""
+    """
 
     resp = chat_functions(
         user_message=user_prompt,
@@ -56,4 +56,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    remap_from_proto()

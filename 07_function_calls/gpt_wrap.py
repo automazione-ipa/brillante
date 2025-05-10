@@ -7,7 +7,7 @@ load_dotenv()
 
 
 def chat_functions(
-        user_message,
+        user_message=None,
         system_message=None,
         assistant_message=None,
         function_message=None,

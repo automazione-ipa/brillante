@@ -1,5 +1,9 @@
+"""Config module"""
 import json
+import logging
+import sys
 
+# Path constants
 POM_FILE = '../pom.xml'
 TXT_REPORT = 'alerts.txt'
 RECIPIENTS = ['alessandrobrillante78@gmail.com', 'lucasalzone@gmail.com']
@@ -14,6 +18,20 @@ MVN_PKG = 'm:packaging'
 MVN_SCOPE = 'm:scope'
 MVN_PARENT = 'mvn:parent'
 MVN_DEP = './/m:dependency'
+
+
+def setup_logging(level=logging.INFO):
+    """Logging setup (centralized)."""
+    logger = logging.getLogger()
+    if not logger.handlers:
+        handler = logging.StreamHandler(sys.stdout)
+        formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+    logger.setLevel(level)
+
+
+setup_logging()
 
 
 def write_alerts(alerts):

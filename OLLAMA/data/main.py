@@ -1,26 +1,31 @@
+"""Main module"""
+
+import logging
 from pomxml_extractor import parse_pom
 from config import POM_FILE, write_pom_json
+
+logger = logging.getLogger(__name__)
 
 
 def main():
     try:
         data = parse_pom(pom_path=POM_FILE)
     except RuntimeError as e:
-        print(f"❌ Errore: {e}")
+        logger.error(f"❌ Errore: {e}")
         return
 
     _, json_path = write_pom_json(data)
 
     proj = data['project']
-    print("📦 Informazioni sul progetto:")
-    print(f"  - groupId:    {proj.get('groupId')}")
-    print(f"  - artifactId: {proj.get('artifactId')}")
-    print(f"  - version:    {proj.get('version')}")
-    print(f"📁 File JSON salvato in: {json_path}")
+    logger.info("📦 Informazioni sul progetto:")
+    logger.info(f"  - groupId:    {proj.get('groupId')}")
+    logger.info(f"  - artifactId: {proj.get('artifactId')}")
+    logger.info(f"  - version:    {proj.get('version')}")
+    logger.info(f"📁 File JSON salvato in: {json_path}")
 
-    print("\n📄 Dipendenze rilevate:")
+    logger.info("📄 Dipendenze rilevate:")
     for d in data['dependencies']:
-        print(f"  • {d['groupId']}:{d['artifactId']}:{d['version']}")
+        logger.info(f"  • {d['groupId']}:{d['artifactId']}:{d['version']}")
 
 
 if __name__ == "__main__":

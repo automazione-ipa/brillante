@@ -1,3 +1,4 @@
+"""PomXML Parser Module"""
 import xml.etree.ElementTree as ET
 
 from config import (

@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-import json
+
 
 def parse_pom(pom_path):
     tree = ET.parse(pom_path)

@@ -1,4 +1,3 @@
-"""Modulo di configurazione e caricamento file in memoria."""
 import json
 
 POM_FILE = '../pom.xml'
@@ -20,10 +19,8 @@ def write_alerts(alerts):
         f.write('\n'.join(alerts))
 
 
-def write_pom_json(result, path="pom_info.json"):
-    """Save to JSON file"""
-    json_path = path
+def write_pom_json(result, json_path="pom_info.json"):
+    """Save result to JSON file"""
     with open(json_path, "w") as f:
         json.dump(result, f, indent=4)
-
     return result, json_path

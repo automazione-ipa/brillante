@@ -16,27 +16,33 @@ FUNCTION_DISPATCHER = {
 }
 
 
-def run_pom_agent():
-    initial_prompt = f"""
-Sei un assistente tecnico. Il tuo compito è leggere un file pom.xml da percorso '{POM_FILE}', estrarre le informazioni e salvarle in un file JSON chiamato 'pom_info.json'.
+class PomAgent:
+    def __init__(self):
+        self.chat_history = []
+        logger.info("🤖 Avvio del POM Agent...")
 
-Dopo l'elaborazione, l'utente potrà farti domande su:
-- dipendenze del progetto
-- struttura XML
-- tecnologie e versioni usate
-"""
+        initial_prompt = f"""
+            Sei un assistente tecnico. 
+            Il tuo compito è leggere un file pom.xml da percorso '{POM_FILE}', estrarre le informazioni e salvarle in un file JSON chiamato 'pom_info.json'.
 
-    logger.info("🤖 Avvio del POM Agent...")
+            Dopo l'elaborazione, l'utente potrà farti domande su:
+            - dipendenze del progetto
+            - struttura XML
+            - tecnologie e versioni usate
+        """
 
-    response = chat_functions(
-        user_message=initial_prompt,
-        functions=FUNCTIONS,
-        function_call="auto"
-    )
+        response = chat_functions(
+            user_message=initial_prompt,
+            functions=FUNCTIONS,
+            function_call="auto"
+        )
+        message = gpt_choice_message(response)
+        self.chat_history.append(message)
 
-    message = gpt_choice_message(response)
-    while True:
-        if message.get("function_call"):
+        self._handle_functions(message)
+
+    def _handle_functions(self, message):
+        while message.get("function_call"):
             fname = message["function_call"]["name"]
             args = json.loads(message["function_call"]["arguments"])
 
@@ -44,54 +50,45 @@ Dopo l'elaborazione, l'utente potrà farti domande su:
                 logger.info(f"⚙️  Eseguo funzione: {fname} con args: {args}")
                 result = FUNCTION_DISPATCHER[fname](**args)
 
-                message = chat_functions(
-                    function_message={
-                        "role": "function",
-                        "name": fname,
-                        "content": json.dumps(result)
-                    },
+                function_response = {
+                    "role": "function",
+                    "name": fname,
+                    "content": json.dumps(result)
+                }
+                self.chat_history.append(function_response)
+
+                response = chat_functions(
+                    messages=self.chat_history,
                     functions=FUNCTIONS,
                     function_call="auto"
-                )["choices"][0]["message"]
+                )
+                message = gpt_choice_message(response)
+                self.chat_history.append(message)
             else:
                 logger.warning(f"❌ Funzione non gestita: {fname}")
                 break
-        else:
-            logger.info(f"🗨️ {message.get('content')}")
-            break
 
-    # Ora avvia la chat interattiva
+    def ask(self, user_input):
+        self.chat_history.append({"role": "user", "content": user_input})
+
+        response = chat_functions(
+            messages=self.chat_history,
+            functions=FUNCTIONS,
+            function_call="auto"
+        )
+        message = gpt_choice_message(response)
+        self.chat_history.append(message)
+
+        if message.get("function_call"):
+            self._handle_functions(message)
+        else:
+            logger.info("🗨️ %s", message.get("content"))
+
+
+def run_pom_agent():
+    agent = PomAgent()
     while True:
         user_input = input("\n❓ Fai una domanda sul pom.xml (oppure digita 'exit'): ")
         if user_input.lower() == "exit":
             break
-
-        chat_response = chat_functions(
-            user_message=user_input,
-            functions=FUNCTIONS,
-            function_call="auto"
-        )
-
-        message = gpt_choice_message(chat_response)
-
-        if message.get("function_call"):
-            fname = message["function_call"]["name"]
-            args = json.loads(message["function_call"]["arguments"])
-
-            if fname in FUNCTION_DISPATCHER:
-                result = FUNCTION_DISPATCHER[fname](**args)
-
-                message = chat_functions(
-                    function_message={
-                        "role": "function",
-                        "name": fname,
-                        "content": json.dumps(result)
-                    },
-                    functions=FUNCTIONS,
-                    function_call="auto"
-                )["choices"][0]["message"]
-                logger.info("🗨️ %s", message["content"])
-            else:
-                logger.warning(f"⚠️ Funzione non riconosciuta: {fname}")
-        else:
-            logger.info("🗨️ %s", message.get("content"))
+        agent.ask(user_input)

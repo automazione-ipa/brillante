@@ -1,7 +1,6 @@
 """
 Orchestra l’esecuzione di ingestion, parsing, salvataggio e grafo
 """
-import json
 from src.ingestion import fetch_sections
 from src.parser import parse_section
 from src.database import init_db, save_paragraphs

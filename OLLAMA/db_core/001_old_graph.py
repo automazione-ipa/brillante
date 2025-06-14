@@ -2,12 +2,16 @@ from enum import Enum
 
 import networkx as nx
 
+
 # Types
 class InformationType(str, Enum):
     ALGORITHM   = "Algorithm"
     CONCEPT     = "Concept"
 
+
 g = nx.DiGraph()
+
+
 # Nodi
 tp_symm_encryption = ("Symmetric encryption", {"type": "Concept"})
 tp_DES = ("DES", {"type": "Algorithm", "key_length": 56, "block_size": 64})

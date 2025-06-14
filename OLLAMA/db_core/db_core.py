@@ -1,18 +1,3 @@
-# data_example = {
-#   "id": "symmetric-encryption",
-#   "title": "Symmetric encryption",
-#   "paragraphs": [
-#       "Symmetric cryptography...", ...
-#   ],
-#   "lists": {
-#       "ul": [...],
-#       "ol": [...]
-#   },
-#   "code": [
-#       "C = enc(K, P)", ...
-#   ]
-# }
-
 """
 Interfaccia per salvataggio dei paragrafi su SQLite
 """

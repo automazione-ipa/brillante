@@ -4,7 +4,7 @@ import logging
 import sys
 
 # Path constants
-POM_FILE = '../pom.xml'
+POM_FILE = 'resources/pom.xml'
 TXT_REPORT = 'alerts.txt'
 RECIPIENTS = ['alessandrobrillante78@gmail.com', 'lucasalzone@gmail.com']
 NVD_URL = 'https://nvd.nist.gov/vuln/search'
@@ -39,7 +39,7 @@ def write_alerts(alerts):
         f.write('\n'.join(alerts))
 
 
-def write_pom_json(result, json_path="pom_info.json"):
+def write_pom_json(result, json_path="resources/pom_info.json"):
     """Save result to JSON file"""
     with open(json_path, "w") as f:
         json.dump(result, f, indent=4)

@@ -1,10 +1,10 @@
 """Interactive function call agent"""
 import logging
 import json
-from gpt_wrap import chat_functions, gpt_choice_message
-from functions import FUNCTIONS
-from agent_functions import parse_pom_file, write_file, read_file, load_json
-from config import POM_FILE
+from pom_agent.gpt_wrap import chat_functions, gpt_choice_message
+from pom_agent.functions import FUNCTIONS
+from pom_agent.agent_functions import parse_pom_file, write_file, read_file, load_json
+from pom_agent.config import POM_FILE
 
 logger = logging.getLogger(__name__)
 

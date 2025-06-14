@@ -1,7 +1,7 @@
 """PomXML Parser Module"""
 import xml.etree.ElementTree as ET
 
-from config import (
+from pom_agent.config import (
     MAVEN_URL,
     MVN_GROUP_ID,
     MVN_ARTIFACT_ID,

@@ -1,8 +1,8 @@
 """Main module"""
 
 import logging
-from pomxml_extractor import parse_pom
-from config import POM_FILE, write_pom_json
+from pom_agent.pomxml_extractor import parse_pom
+from pom_agent.config import POM_FILE, write_pom_json
 
 logger = logging.getLogger(__name__)
 

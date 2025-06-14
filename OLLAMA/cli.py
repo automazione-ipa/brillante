@@ -1,7 +1,7 @@
 """Command Line Interface for the PomAgent"""
 
 import sys
-from interactive_agent import PomAgent
+from pom_agent.interactive_agent import PomAgent
 
 MENU = """
 ========= 📦 POM Agent CLI =========

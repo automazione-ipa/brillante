@@ -1,7 +1,6 @@
 """Agent functions wrapper module."""
 import json
-from pomxml_extractor import parse_pom
-from config import write_pom_json
+from pom_agent.pomxml_extractor import parse_pom
 
 
 def parse_pom_file(pom_path):

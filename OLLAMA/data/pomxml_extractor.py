@@ -1,18 +1,29 @@
 import xml.etree.ElementTree as ET
 
+from config import (
+    MAVEN_URL,
+    MVN_GROUP_ID,
+    MVN_ARTIFACT_ID,
+    MVN_VERSION,
+    MVN_PKG,
+    MVN_PARENT,
+    MVN_SCOPE,
+    MVN_DEP
+)
+
 
 def parse_pom(pom_path):
     tree = ET.parse(pom_path)
     root = tree.getroot()
 
     # Define namespace
-    ns = {'m': 'http://maven.apache.org/POM/4.0.0'}
+    ns = {'m': MAVEN_URL}
 
     # Extract project information
-    artifact_id = root.find('m:artifactId', ns).text
-    version = root.find('m:version', ns).text
-    group_id = root.find('m:groupId', ns).text
-    packaging = root.find('m:packaging', ns).text if root.find('m:packaging', ns) is not None else "jar"
+    artifact_id = root.find(MVN_ARTIFACT_ID, ns).text
+    version = root.find(MVN_VERSION, ns).text
+    group_id = root.find(MVN_GROUP_ID, ns).text
+    packaging = root.find(MVN_PKG, ns).text if root.find(MVN_PKG, ns) is not None else "jar"
 
     project_info = {
         'groupId': group_id,
@@ -23,12 +34,12 @@ def parse_pom(pom_path):
 
     # Extract dependencies
     dependencies = []
-    for dep in root.findall('.//m:dependency', ns):
+    for dep in root.findall(MVN_DEP, ns):
         dep_info = {
-            'groupId': dep.find('m:groupId', ns).text,
-            'artifactId': dep.find('m:artifactId', ns).text,
-            'version': dep.find('m:version', ns).text if dep.find('m:version', ns) is not None else "",
-            'scope': dep.find('m:scope', ns).text if dep.find('m:scope', ns) is not None else "compile"
+            'groupId': dep.find(MVN_GROUP_ID, ns).text,
+            'artifactId': dep.find(MVN_ARTIFACT_ID, ns).text,
+            'version': dep.find(MVN_VERSION, ns).text if dep.find(MVN_VERSION, ns) is not None else "",
+            'scope': dep.find(MVN_SCOPE, ns).text if dep.find(MVN_SCOPE, ns) is not None else "compile"
         }
         dependencies.append(dep_info)
 

@@ -6,12 +6,14 @@ RECIPIENTS = ['alessandrobrillante78@gmail.com', 'lucasalzone@gmail.com']
 NVD_URL = 'https://nvd.nist.gov/vuln/search'
 
 # Maven Constants
-MAVEN = 'http://maven.apache.org/POM/4.0.0'
-MVN_GROUP_ID = 'mvn:groupId'
-MVN_ARTIFACT_ID = 'mvn:artifactId'
-MVN_VERSION = 'mvn:version'
+MAVEN_URL = 'http://maven.apache.org/POM/4.0.0'
+MVN_GROUP_ID = 'm:groupId'
+MVN_ARTIFACT_ID = 'm:artifactId'
+MVN_VERSION = 'm:version'
+MVN_PKG = 'm:packaging'
+MVN_SCOPE = 'm:scope'
 MVN_PARENT = 'mvn:parent'
-MVN_DEP = './/mvn:dependency'
+MVN_DEP = './/m:dependency'
 
 
 def write_alerts(alerts):

@@ -177,3 +177,5 @@ profiler.png
 /sphinx/source/logic/
 /sphinx/source/signatures/
 /rag/
+
+/OLLAMA/venv

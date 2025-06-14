@@ -1,41 +1,38 @@
 import xml.etree.ElementTree as ET
-from config import POM_FILE, MAVEN, MVN_GROUP_ID, MVN_ARTIFACT_ID, MVN_VERSION, MVN_DEP, MVN_PARENT
+import json
 
+def parse_pom(pom_path):
+    tree = ET.parse(pom_path)
+    root = tree.getroot()
 
-def parse_pom(pom=POM_FILE):
-    """
-    Analizza pom.xml, ritorna dict con:
-      - project: {'groupId','artifactId','version'}
-      - dependencies: [ {groupId, artifactId, version}, ... ]
-    """
-    ns = {'mvn': MAVEN}
-    try:
-        tree = ET.parse(pom)
-        root = tree.getroot()
-    except (FileNotFoundError, ET.ParseError) as e:
-        raise RuntimeError(f"Errore parsing '{pom}': {e}")
+    # Define namespace
+    ns = {'m': 'http://maven.apache.org/POM/4.0.0'}
 
-    # Estrai info progetto (eventuale parent fallback)
-    proj = {}
-    parent = root.find(MVN_PARENT, ns)
-    for tag in ('groupId', 'artifactId', 'version'):
-        el = root.find(
-            f"mvn:{tag}", ns
-        ) or (
-            parent.find(f"mvn:{tag}", ns) if parent is not None else None
-        )
-        proj[tag] = el.text if el is not None else None
+    # Extract project information
+    artifact_id = root.find('m:artifactId', ns).text
+    version = root.find('m:version', ns).text
+    group_id = root.find('m:groupId', ns).text
+    packaging = root.find('m:packaging', ns).text if root.find('m:packaging', ns) is not None else "jar"
 
-    # Estrai dipendenze
-    deps = []
-    for dep in root.findall(MVN_DEP, ns):
-        gid = dep.find(MVN_GROUP_ID, ns)
-        aid = dep.find(MVN_ARTIFACT_ID, ns)
-        ver = dep.find(MVN_VERSION, ns)
-        deps.append({
-            'groupId': gid.text.strip() if gid is not None else '',
-            'artifactId': aid.text.strip() if aid is not None else '',
-            'version': ver.text.strip() if ver is not None else '',
-        })
+    project_info = {
+        'groupId': group_id,
+        'artifactId': artifact_id,
+        'version': version,
+        'packaging': packaging
+    }
 
-    return {'project': proj, 'dependencies': deps}
+    # Extract dependencies
+    dependencies = []
+    for dep in root.findall('.//m:dependency', ns):
+        dep_info = {
+            'groupId': dep.find('m:groupId', ns).text,
+            'artifactId': dep.find('m:artifactId', ns).text,
+            'version': dep.find('m:version', ns).text if dep.find('m:version', ns) is not None else "",
+            'scope': dep.find('m:scope', ns).text if dep.find('m:scope', ns) is not None else "compile"
+        }
+        dependencies.append(dep_info)
+
+    return {
+        'project': project_info,
+        'dependencies': dependencies
+    }

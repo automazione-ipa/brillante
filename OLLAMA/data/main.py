@@ -1,9 +1,10 @@
 from pomxml_extractor import parse_pom
+from config import POM_FILE
 
 
 def main():
     try:
-        data = parse_pom()
+        data = parse_pom(pom_path=POM_FILE)
     except RuntimeError as e:
         print(f"Errore: {e}")
         return

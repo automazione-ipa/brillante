@@ -128,16 +128,14 @@ This script uses the pipeline defined in `document_rag_agents/pipelines/generate
 
 ## IA e Ragionamento Giuridico
 
-### Ricerca neuro-simbolica
+### Ricerca neuro-simbolica per il ragionamento giuridico complesso
 
-Miglior Candidato al momento
+Per costruire un agente di ragionamento giuridico (complesso) il miglior candidato sembra riguardare le intelligenze artificiali neuro-simboliche.
+
 
 - https://github.com/IBM/neuro-symbolic-ai
 - https://ibm.github.io/neuro-symbolic-ai/
-
----
-
-Ecco una panoramica su come altri hanno affrontato il tema dell’IA per il ragionamento giuridico e quali tecnologie hanno ottenuto i migliori risultati:
+- https://github.com/IBM/LNN
 
 ---
 

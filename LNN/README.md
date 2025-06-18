@@ -1,47 +1,179 @@
 # 🧠 Progetto: Ragionamento Giuridico con LNN
 
-## 0. Installare LNN in locale e usare i moduli
+This guide provides a concise reference to using the IBM Logical Neural Networks (LNN) library (2023 version). It covers model setup, adding knowledge and data, inference, and key constants/enums.
 
-pip install git+https://github.com/IBM/LNN.git
-
-
-## 1. Introduzione
+## 1. Introduzione - LNN Cookbook Guide (IBM LNN Latest Version)
 Utilizziamo **Logical Neural Networks (LNN)**, un framework **neuro‑simbolico** che unisce capacità di apprendimento automatico con rigore logico.  
 Ogni neurone corrisponde a un costrutto logico pesato — con:
 - Inferenza bidirezionale (forward/backward reasoning)
 - Modello end‑to‑end differenziabile
 - Gestione dell'incertezza tramite intervalli di verità
-- Resilienza a conoscenza incompleta o inconsistenti  
-:contentReference[oaicite:1]{index=1}
+- Resilienza a conoscenza incompleta o inconsistenti
 
-**Perché nel campo giuridico?**
+---
+
+### 1. Installation
+
+```bash
+pip install git+https://github.com/IBM/LNN.git
+```
+
+---
+
+### 2. Creating a Dynamic LNN Model
+
+```python
+from lnn import Model
+
+# Initialize an empty model
+g_model = Model()
+```
+
+A `Model` is a container for logical formulae, data, and inference state; it is populated on-demand.
+
+---
+
+### 3. Defining Variables and Predicates
+
+```python
+from lnn import Variables, Predicates
+
+# First-order logic variables
+x, y = Variables('x', 'y')
+
+# Predicates (specify arity for relations)
+Smokes, Cancer = Predicates('Smokes', 'Cancer')  # unary predicates
+Friends = Predicates('Friends', arity=2)
+```
+
+---
+
+### 4. Adding Knowledge (Axioms)
+
+Use `add_knowledge` to insert formulae (axioms) into the model under a chosen world assumption.
+
+```python
+from lnn import Implies, Iff, World
+
+# Logical rules
+rule1 = Implies(Smokes(x), Cancer(x))
+rule2 = Implies(Friends(x, y), Iff(Smokes(x), Smokes(y)))
+
+# Add as axioms (always true)
+g_model.add_knowledge(rule1, rule2, World.AXIOM)
+```
+
+* **World.AXIOM**: formulae assumed universally true.
+* **World.OPEN**, **World.CLOSED**, **World.CONTRADICTION** available.
+
+---
+
+### 5. Adding Data (Facts/Beliefs)
+
+Raw facts or belief bounds must be added via `add_data` (not deprecated `add_facts`).
+
+```python
+from lnn import Fact
+
+g_model.add_data({
+    Smokes: { 'Alice': Fact.TRUE },
+    Friends: { ('Alice', 'Bob'): Fact.TRUE }
+})
+```
+
+* For **propositional** formulae, map `Formula: Fact.TRUE/FALSE/UNKNOWN` or numeric bounds.
+* For **FOL** predicates, provide a dict keyed by grounding tuples/strings.
+
+---
+
+### 6. Running Inference
+
+After data and axioms are loaded, call:
+
+```python
+g_model.infer()
+```
+
+This executes upward and downward passes to propagate truth bounds.
+
+---
+
+### 7. Inspecting Results
+
+Access node states via model indexing:
+
+```python
+alice_cancer = g_model['Cancer(Alice)']
+bob_smokes = g_model['Smokes(Bob)']
+print(alice_cancer.state, bob_smokes.state)
+```
+
+Use `model.items()` to list all formula states.
+
+---
+
+### 8. Key Constants and Enums (constants.py)
+
+#### 8.1 `Fact` enum
+
+* `Fact.TRUE = (1.0, 1.0)` – definitely true
+* `Fact.FALSE = (0.0, 0.0)` – definitely false
+* `Fact.UNKNOWN = (0.0, 1.0)` – unknown
+* `Fact.CONTRADICTION = (1.0, 0.0)` – conflicting evidence
+
+#### 8.2 `_AutoName` base class
+
+Used to auto-generate string-valued enum members.
+
+#### 8.3 `Bound` enum
+
+* `Bound.LOWER`, `Bound.UPPER` restrict inference to lower/upper truth bound.
+
+#### 8.4 `Direction` enum
+
+* `Direction.UPWARD`, `Direction.DOWNWARD` control inference pass direction.
+
+#### 8.5 `Join` enum
+
+* `Join.INNER`, `INNER_EXTENDED`, `OUTER`, `OUTER_PRUNED` for grounding joins.
+
+#### 8.6 `Loss` enum
+
+* `Loss.LOGICAL`, `SUPERVISED`, `UNCERTAINTY`, `CONTRADICTION`, `CUSTOM` for training.
+
+#### 8.7 `NeuralActivation` enum
+
+* `Godel`, `Frechet`, `Lukasiewicz`, `LukasiewiczTransparent`, `Product` for t-norm choices.
+
+#### 8.8 `World` enum
+
+* `World.AXIOM` (1.0,1.0), `OPEN` (0.0,1.0), `CLOSED`/`FALSE` (0.0,0.0), `CONTRADICTION` (1.0,0.0).
+
+---
+
+### 9. Best Practices
+
+* Use **`add_knowledge`** strictly for inserting logical formulae (axioms, rules).
+* Use **`add_data`** for ground facts and beliefs; keys must match existing formula objects.
+* Always call **`infer()`** after adding data to propagate bounds.
+* Inspect **`model[...] .state`** or `model.items()` for results.
+
+---
+
+This guide aligns with the latest IBM LNN (2023) API. It should serve as a quick-reference for building and reasoning with logical neural networks.
+
+---
+
+## 2. Regolamenti e Ragionamenti In Ambito Giuridico
+
+**Perché può essere utile applicare questi concetti in ambito giuridico?**
 - **Spiegazioni logiche trasparenti**
 - **Rappresentazione di norme, fatti e deduzioni complesse**
 - **Scalabilità verso grandi KB normative**
 
 ---
 
-## 2. Lezioni già svolte
-
-### Lezione 1 – Geometria
-Abbiamo modellato:
-```fol
-Square(c), Square(k)
-∀x Square(x) → Rectangle(x)
-∀x Rectangle(x) → Fourside(x)
-```
-
-Codice LNN:
-
-```python
-model = Model()
-...
-print({'c','k'})
-```
-
-✅ Obbiettivo raggiunto: dimostrare che esiste un oggetto con quattro lati.
-
-### Lezione 2 – Regola Giuridica
+### Introduzione
 
 Modellato formalmente:
 
@@ -135,8 +267,6 @@ Ora tocca a noi implementare, testare e iterare verso una piattaforma ILP-Giurid
 
 
 Fammi sapere quando lo inserisco nel repository ufficiale oppure se desideri modifiche o approfondimenti su sezioni specifiche!
-
-::contentReference[oaicite:38]{index=38}
 
 
 [1]: https://arxiv.org/html/2410.07966v1?utm_source=chatgpt.com "Neural Reasoning Networks: Efficient Interpretable Neural Networks With ..."

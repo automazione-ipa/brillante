@@ -1,7 +1,3 @@
-Ecco un riassunto dei concetti principali:
-
----
-
 ### **Rappresentazione della Conoscenza con Predicati (LNN)**
 
 * **Predicati**: Sono i blocchi fondamentali della logica del primo ordine nei sistemi come le **Logical Neural Networks (LNNs)**.

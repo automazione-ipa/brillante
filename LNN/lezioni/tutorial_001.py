@@ -1,41 +1,24 @@
-import logging
 from lnn import (
-    Model,
-    Predicates,
-    Variables,
-    Implies,
-    Iff,
-    World
+    Propositions,
+    Fact,
+    Predicate,
 )
 
-# Configurazione del logger
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# propositional
+P, Q = Propositions("P", "Q")
+P.add_data(Fact.TRUE)
+Q.add_data((.1, .4))
 
-# 1. Dynamic LNN Models: empty container populated on-demand with the knowledge and data required to compute over
-# Discoverable information that requires reasoning over the new information while simultaneously retaining previously stored or inferred facts.
-# Model knowledge and facts can be initiated with model constructors or populated with content on-demand
-logger.info("Inizio creazione del modello LNN")
-model = Model()
+# first-order logic (FOL)
+Person = Predicate("Person")
+Person.add_data({
+    "Barack Obama": Fact.TRUE,
+    "Bo": (.1, .4)
+})
 
-x, y = Variables('x', 'y')
-
-Smokes, Cancer = Predicates('Smokes', 'Cancer')
-Friends = Predicates('Friends', arity=2)
-
-logger.info("Predicati definiti: Smokes, Cancer, Friends")
-
-Smoking_causes_Cancer = Implies(Smokes(x), Cancer(x))
-Smokers_befriend_Smokers = Implies(Friends(x, y), Iff(Smokes(x), Smokes(y)))
-
-logger.info("Formule logiche costruite")
-
-formulae = [
-    Smoking_causes_Cancer,
-    Smokers_befriend_Smokers
-]
-
-model.add_knowledge(*formulae, world=World.AXIOM)
-logger.info("Formule aggiunte al modello")
-
-logger.info("Modello pronto")
+# FOL with arity > 2
+BD = Predicate("Birthdate", 2)
+BD.add_data({
+    ("Barack Obama", "04 August 1961"): Fact.TRUE,
+    ("Bo", "09 October 2008"): (.6, .75)
+})

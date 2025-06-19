@@ -1,32 +1,28 @@
 from configurations_log import logger
 from model_setup import (
-    Cancer,
     model,
-    fact_1,
-    fact_2,
-    Smokes,
+    target_formulas
 )
 
-model.add_data({**fact_1, **fact_2})
+found = set()
 
-logger.info("Fatti aggiunti al modello via add_data")
-# 6. Inferenza
-model.infer()
-logger.info("Inferenza completata")
 
-# 7. Lettura puntuale dei risultati
-#    Usa sempre oggetti Formula, non stringhe
-alice_cancer = Cancer('Alice')
-bob_smokes = Smokes('Bob')
-bob_cancer = Cancer('Bob')
-
-logger.info(f"Cancer(Alice) state = {model[alice_cancer].state}")
-logger.info(f"Smokes(Bob)    state = {model[bob_smokes].state}")
-logger.info(f"Cancer(Bob)    state = {model[bob_cancer].state}")
-
-# 8. Stato completo (opzionale)
-logger.info("---- Stato completo dei nodi ----")
-for formula_obj, node in model.items():
-    logger.info(f"{formula_obj}: state={node.state}")
-
-logger.info("==== Fine script ====")
+for node in model.nodes.values():
+    print(str(node))
+#
+# for node in model.nodes.values():
+#     formula_str = str(node.formula)
+#     if formula_str in target_formulas:
+#         logger.info(f"{formula_str} → truth interval = [{node.state.lower:.2f}, {node.state.upper:.2f}]")
+#         found.add(formula_str)
+#
+# missing = target_formulas - found
+# for m in missing:
+#     logger.warning(f"Formula {m} non trovata nel modello.")
+#
+# # 8. Stato completo (opzionale): esplorazione di tutti i nodi
+# logger.info("---- Stato completo dei nodi ----")
+# for node in model.nodes.values():
+#     logger.info(f"- {node.formula}: [{node.state.lower:.2f}, {node.state.upper:.2f}]")
+#
+# logger.info("==== Fine script ====")

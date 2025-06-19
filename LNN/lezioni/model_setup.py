@@ -59,3 +59,18 @@ fact_2 = {
         ('Alice', 'Bob'): Fact.TRUE
     }
 }
+
+facts = {**fact_1, **fact_2}
+
+target_formulas = {
+    "Cancer(Alice)",
+    "Smokes(Bob)",
+    "Cancer(Bob)"
+}
+
+model.add_data(facts)
+
+logger.info("Fatti aggiunti al modello via add_data")
+# 6. Inferenza
+model.infer()
+logger.info("Inferenza completata")

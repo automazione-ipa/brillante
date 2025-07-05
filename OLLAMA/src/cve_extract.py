@@ -104,6 +104,6 @@ async def main(search_term, versione_target):
 
 if __name__ == "__main__":
     import sys
-    term = sys.argv[1] if len(sys.argv) > 1 else "neo4j"
+    term = sys.argv[1] if len(sys.argv) > 1 else "log4j"
     ver = sys.argv[2] if len(sys.argv) > 2 else "2.14.1"
     asyncio.run(main(term, ver))

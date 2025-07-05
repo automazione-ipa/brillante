@@ -5,6 +5,9 @@ from playwright.async_api import async_playwright
 from packaging import version
 
 
+OSS_INDEX_TOKEN = "tokenXYZ"
+
+
 def ossindex_search_maven(group_id, artifact_id, version):
     url = "https://ossindex.sonatype.org/api/v3/component-report"
     coordinates = f"pkg:maven/{group_id}/{artifact_id}@{version}"
